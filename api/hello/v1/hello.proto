@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package dio.api.hello.v1;
+option go_package = "github.com/dio/hello/api/hello/v1";
+
+import "google/api/annotations.proto";
+import "protoc-gen-swagger/options/annotations.proto";
+
+option (grpc.gateway.protoc_gen_swagger.options.openapiv2_swagger) = {
+    info: {
+		title: "Hello Service";
+		version: "1.0";
+		contact: {
+			name: "Dhi Aurrahman";
+			url: "https://github.com/dio";
+			email: "dio@rockybars.com";
+        };
+    };
+    schemes: HTTP;
+    consumes: "application/json";
+    produces: "application/json";
+    responses: {
+		key: "404";
+		value: {
+			description: "Returned when the resource does not exist.";
+			schema: {
+				json_schema: {
+					type: STRING;
+				}
+			}
+		}
+	}
+};
+
+service HelloService {
+  rpc Say(SayRequest) returns (SayResponse) {
+    option (google.api.http) = {
+      post: "/api/v1/say"
+      body: "*"
+    };
+  }
+
+  rpc Poke(PokeRequest) returns (PokeResponse) {
+    option (google.api.http) = {
+      get: "/api/v1/poke/{name}"
+    };
+  }
+}
+
+message SayRequest {
+  string message = 1;
+}
+
+message SayResponse {
+  string message = 1;
+}
+
+message PokeRequest {
+  string name = 1;
+}
+
+message PokeResponse {
+  string message = 1;
+}
